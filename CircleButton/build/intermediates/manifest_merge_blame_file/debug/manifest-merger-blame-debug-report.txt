@@ -1,0 +1,13 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="at.markushi.circlebutton"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk android:minSdkVersion="1" />
+7-->E:\androidproject\mobilesafe\CircleButton\src\main\AndroidManifest.xml
+8
+9    <application />
+9-->E:\androidproject\mobilesafe\CircleButton\src\main\AndroidManifest.xml:7:5-20
+10
+11</manifest>

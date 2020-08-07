@@ -1,0 +1,5 @@
+R_DEF: Internal format may change without notice
+local
+attr? cb_color
+attr? cb_pressedRingWidth
+styleable CircleButton cb_color cb_pressedRingWidth
