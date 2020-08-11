@@ -11,6 +11,7 @@
         android:text="功能列表"
         style="@style/title"/>
     <com.xiaoer.mobilesafe.view.FocusView
+        android:id="@+id/home_msg"
         android:layout_below="@+id/home_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,10 +23,12 @@
         android:focusableInTouchMode="true"
         android:text="床前明月光，疑是地上霜，举头望明月，低头思故乡。" />
 
-    <GridLayout
+    <GridView
+        android:id="@+id/gv_tool"
+        android:layout_below="@+id/home_msg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:numColumns="3" />
 
 
 </RelativeLayout>
