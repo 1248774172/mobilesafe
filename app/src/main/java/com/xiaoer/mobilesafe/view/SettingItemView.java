@@ -11,7 +11,7 @@ import com.xiaoer.mobilesafe.R;
 
 public class SettingItemView extends RelativeLayout {
 
-    private static CheckBox cb_set;
+    private CheckBox cb_set;
     private TextView tv_bigTitle;
     private TextView tv_smallTitle;
 
@@ -31,8 +31,20 @@ public class SettingItemView extends RelativeLayout {
         tv_smallTitle = inflate.findViewById(R.id.tv_smallTitle);
     }
 
-    public static boolean isChecked(){
+    public boolean isChecked(){
         return cb_set.isChecked();
     }
 
+    public void setChecked(boolean b){
+        cb_set.setChecked(b);
+        if(b){
+            tv_smallTitle.setText("自动更新已开启");
+        }else {
+            tv_smallTitle.setText("自动更新已关闭");
+        }
+    }
+
+    public void setTitle(String title){
+        tv_bigTitle.setText(title);
+    }
 }
