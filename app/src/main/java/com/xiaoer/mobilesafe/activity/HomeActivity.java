@@ -125,7 +125,6 @@ public class HomeActivity extends AppCompatActivity {
                 public void onSuccess(File result) {
                     Log.d(TAG, "onSuccess: 成功了"+result.getPath());
                     installAPK(result);
-                    return;
                 }
 
                 @Override
@@ -160,6 +159,7 @@ public class HomeActivity extends AppCompatActivity {
         intent.setDataAndType(Uri.fromFile(file),"application/vnd.package-archive");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivityForResult(intent,100);
+        return;
     }
 /**
  *  @describe 检查是否需要安装未知应用的权限

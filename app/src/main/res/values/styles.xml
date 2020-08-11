@@ -7,5 +7,22 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowNoTitle">true</item>
     </style>
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:padding="15dp"-->
+<!--        android:text="功能列表"-->
+<!--        android:textColor="#000"-->
+<!--        android:textSize="30sp"-->
+<!--        android:gravity="center"-->
+<!--        android:background="#FF99CC"/>-->
+    <style name="title">
+        <!-- Customize your theme here. -->
+        <item name="android:padding">15dp</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">#FF99CC</item>
+        <item name="android:textSize">25sp</item>
+    </style>
 
 </resources>

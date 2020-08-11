@@ -33,6 +33,7 @@ public class ADActivity extends AppCompatActivity {
     private String json;
     private Button bt_stepAD;
     private ImageView iv_icon;
+    private TimerTask mTimerTask;
 
 
     @Override
@@ -52,6 +53,7 @@ public class ADActivity extends AppCompatActivity {
         bt_stepAD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mTimerTask.cancel();
                 enterHome();
             }
         });
@@ -80,7 +82,7 @@ public class ADActivity extends AppCompatActivity {
             @Override
             public void run() {
                 super.run();
-                final TimerTask timerTask = new TimerTask() {
+                mTimerTask = new TimerTask() {
                     int i = 6;
                     @Override
                     public void run() {
@@ -99,7 +101,7 @@ public class ADActivity extends AppCompatActivity {
                     }
                 };
                 Timer timer = new Timer();
-                timer.schedule(timerTask, 0, 1000);
+                timer.schedule(mTimerTask, 0, 1000);
             }
         }.start();
     }
