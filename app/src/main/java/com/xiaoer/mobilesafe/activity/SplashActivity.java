@@ -1,5 +1,6 @@
 package com.xiaoer.mobilesafe.activity;
 
+import android.app.ActionBar;
 import android.app.Application;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -17,10 +18,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.LongDef;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.loopj.android.image.SmartImageView;
 import com.xiaoer.mobilesafe.R;
+import com.xiaoer.mobilesafe.Utils.StatusBarUtils;
 import com.xiaoer.mobilesafe.Utils.StringUtil;
 
 import org.xutils.HttpManager;
@@ -47,6 +50,7 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        StatusBarUtils.hideStatusBar(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
@@ -54,10 +58,10 @@ public class SplashActivity extends AppCompatActivity {
         initUI();
         //初始化数据
         initDate();
-//        初始化动画
+        //初始化动画
         initAnimation();
-
-
+        //隐藏状态栏
+        StatusBarUtils.hideStatusBar(this);
 
     }
 /**

@@ -3,6 +3,7 @@ package com.xiaoer.mobilesafe.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import androidx.core.content.ContextCompat;
 
 import com.loopj.android.image.SmartImageView;
 import com.xiaoer.mobilesafe.R;
+import com.xiaoer.mobilesafe.Utils.StatusBarUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,6 +50,8 @@ public class ADActivity extends AppCompatActivity {
         initAD();
         //5s后自动退出广告页面
         stepAD();
+        //隐藏状态栏
+        StatusBarUtils.hideStatusBar(this);
 
         //给跳过按钮添加监听事件
         bt_stepAD.setOnClickListener(new View.OnClickListener() {
