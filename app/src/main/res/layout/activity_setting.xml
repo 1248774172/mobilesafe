@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:mobilesafe="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".activity.SettingActivity"
@@ -15,10 +15,16 @@
 
     <com.xiaoer.mobilesafe.view.SettingItemView
         android:id="@+id/siv_update"
+        mobilesafe:bigTitle="自动更新"
+        mobilesafe:smallTitleOff="自动更新已关闭"
+        mobilesafe:smallTitleOn="自动更新已开启"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <com.xiaoer.mobilesafe.view.SettingItemView
+        mobilesafe:bigTitle="电话归属地显示设置"
+        mobilesafe:smallTitleOff="电话归属地显示设置已关闭"
+        mobilesafe:smallTitleOn="电话归属地显示设置已开启"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

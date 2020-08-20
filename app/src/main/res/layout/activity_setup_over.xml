@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/title"
+        android:text="手机防盗"/>
+    <com.xiaoer.mobilesafe.view.FocusView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:textSize="20sp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:focusableInTouchMode="true"
+        android:text="向该手机发送带有功能字符的短信启动功能，纯数字锁屏密码必须大于4位"/>
+
+
+    <com.xiaoer.mobilesafe.view.SettingItemView
+        android:id="@+id/siv_safe"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:bigTitle="手机防盗"
+        app:smallTitleOn="手机防盗已开启"
+        app:smallTitleOff="手机防盗已关闭"/>
+
+    <com.xiaoer.mobilesafe.view.SettingItemView
+        android:id="@+id/siv_admin"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:bigTitle="设备管理权限"
+        app:smallTitleOn="设备管理权限已开启"
+        app:smallTitleOff="设备管理权限已关闭"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="安全手机"
+            android:textSize="25sp"
+            android:textColor="#000"/>
+
+        <TextView
+            android:id="@+id/tv_phone"
+            android:gravity="right"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:text="手机号"
+            android:textSize="25sp"
+            android:textColor="#000"/>
+
+    </LinearLayout>
+    <View
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000" />
+
+    <TextView
+        android:id="@+id/tv_reset"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="重新进入设置向导"
+        android:textSize="25sp"
+        android:textColor="#000"/>
+
+    <TextView
+        android:padding="10dp"
+        android:background="#FFCCFF"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="功能简介"
+        android:textSize="25sp"
+        android:textColor="#000"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:drawableLeft="@drawable/list_star"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="播放报警音乐#*alarm*#"
+            android:textColor="#000"/>
+        <TextView
+            android:drawableLeft="@drawable/list_star"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="GPS追踪#*location*#"
+            android:textColor="#000"/>
+        <TextView
+            android:drawableLeft="@drawable/list_star"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="远程数据销毁#*wipedata*#"
+            android:textColor="#000"/>
+        <TextView
+            android:drawableLeft="@drawable/list_star"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="远程锁屏#*lockscreen*#"
+            android:textColor="#000"/>
+
+        <TextView
+            android:drawableLeft="@drawable/list_star"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:maxLines="1"
+            android:text="@string/lockscreen_pwd"
+            android:textColor="#000"/>
+
+    </LinearLayout>
+
+</LinearLayout>

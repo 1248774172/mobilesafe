@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -24,13 +25,15 @@
             android:text="小标题"
             android:textSize="20sp"
             android:textColor="#000"/>
-        <CheckBox
-            android:id="@+id/cb_set"
+        <it.beppi.tristatetogglebutton_library.TriStateToggleButton
+            android:id="@+id/ttb_set"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            app:tbIsMidSelectable="false"/>
         <View
+            android:id="@+id/v_line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#000"

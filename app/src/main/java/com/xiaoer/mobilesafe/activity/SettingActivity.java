@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.xiaoer.mobilesafe.R;
+import com.xiaoer.mobilesafe.Utils.SpKey;
+import com.xiaoer.mobilesafe.Utils.SpUtil;
 import com.xiaoer.mobilesafe.view.SettingItemView;
 
 public class SettingActivity extends AppCompatActivity {
@@ -27,17 +29,17 @@ public class SettingActivity extends AppCompatActivity {
      */
     private void initUpdate() {
         siv_update = findViewById(R.id.siv_update);
-        siv_update.setTitle("自动更新");
-        siv_update.setChecked(true);
+        boolean update = SpUtil.getBoolean(this, SpKey.UPDATE, false);
+        siv_update.setChecked(update);
         siv_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(siv_update.isChecked()){
-                    siv_update.setChecked(false);
-                }else{
-                    siv_update.setChecked(true);
-                }
+                //点击后将状态取反
+                siv_update.setChecked(!siv_update.isChecked());
+                //储存状态
+                SpUtil.putBoolean(getApplicationContext(), SpKey.UPDATE,siv_update.isChecked());
             }
         });
     }
+
 }

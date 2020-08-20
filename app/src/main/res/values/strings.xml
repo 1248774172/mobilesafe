@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">mobilesafe</string>
+
+    <string name="sample_device_admin">手机防盗</string>
+    <string name="sample_device_admin_description">手机丢失后可进行一键锁屏，一键清除数据等功能</string>
+    <string name="lockscreen_pwd"><![CDATA[设置密码<pwd>密码</pwd>]]></string>
 </resources>

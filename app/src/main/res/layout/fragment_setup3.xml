@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3/3"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:textSize="100sp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="恭喜您设置完成"
+            android:textSize="40sp"
+            android:textColor="#000"/>
+
+        <it.beppi.tristatetogglebutton_library.TriStateToggleButton
+            android:id="@+id/ttb_safe"
+            android:layout_marginTop="130dp"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            app:tbIsMidSelectable="false" />
+        <TextView
+            android:id="@+id/tv_safe"
+            android:layout_marginTop="80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="手机防盗关闭"
+            android:textSize="30sp"
+            android:textColor="#000"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/bt_setupOver"
+        android:padding="15dp"
+        android:layout_marginTop="70dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/circle_button_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="完成设置"
+        android:textSize="30sp"
+        android:textColor="#000"/>
+
+</LinearLayout>

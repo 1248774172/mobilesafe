@@ -1,10 +1,8 @@
 package com.xiaoer.mobilesafe.activity;
 
 import android.Manifest;
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -14,32 +12,41 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.loopj.android.image.SmartImageView;
+import com.rengwuxian.materialedittext.MaterialEditText;
 import com.xiaoer.mobilesafe.R;
+import com.xiaoer.mobilesafe.Utils.Md5Util;
+import com.xiaoer.mobilesafe.Utils.PermissionsUtil;
+import com.xiaoer.mobilesafe.Utils.SpKey;
+import com.xiaoer.mobilesafe.Utils.SpUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xutils.HttpManager;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.io.File;
+import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -50,6 +57,8 @@ public class HomeActivity extends AppCompatActivity {
     private GridView gv_tool;
     private String[] mToolStr;
     private int[] mDrawableId;
+    private String mInitPwd;
+    private String mConfirmPwd;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -57,28 +66,187 @@ public class HomeActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        String [] permissions = new String[]{Manifest.permission.READ_CONTACTS,Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.RECEIVE_SMS,
+                Manifest.permission.SEND_SMS,Manifest.permission.READ_SMS,Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION};
+        //检查权限
+        PermissionsUtil.getInstance().checkPermissions(this, permissions, new PermissionsUtil.IPermissionsResult() {
+            @Override
+            public void passPermissons() {
+
+            }
+
+            @Override
+            public void forbitPermissons() {
+
+            }
+        });
 
         //初始化ui
         initUI();
         //初始化数据
         initDate();
         //检查是否有新版本
-        Log.d(TAG, "onCreate: 检查更新........");
-        checkUpdate();
+        Log.d(TAG, "sp中的自动更新信息: "+ SpUtil.getBoolean(this, SpKey.UPDATE,false));
+        if(SpUtil.getBoolean(this, SpKey.UPDATE,false)){
+            Log.d(TAG, "onCreate: 检查更新........");
+            checkUpdate();
+        }
 
+        //给主窗口添加监听事件
         gv_tool.setAdapter(new MyAdapter());
         gv_tool.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
-                    case 0:
+                    case 0:              //手机防盗
+                        String pwd = SpUtil.getString(getApplicationContext(), SpKey.SAFE_PWD, "");
+                        if(TextUtils.isEmpty(pwd)){
+                            //第一次使用，初始化密码
+                            initPwdDialog();
+                        }else{
+                            //不是第一次使用，检验密码
+                            confirmPwdDialog();
+                        }
                         break;
-                    case 8:
+                    case 8:         //设置页面
                         Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
                         startActivity(intent);
                         break;
                 }
 
+            }
+        });
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        PermissionsUtil.getInstance().onRequestPermissionsResult(this,requestCode, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    /**
+     * 展示确认密码的对话框，并校验用户密码
+     */
+    private void confirmPwdDialog() {
+        //创建对话框
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog alertDialog = builder.create();
+        View view = View.inflate(getApplicationContext(), R.layout.confirm_pwd_view, null);
+        alertDialog.setView(view);
+        //找控件
+        Button bt_submit = view.findViewById(R.id.bt_submit);
+        Button bt_cancel = view.findViewById(R.id.bt_cancel);
+        final MaterialEditText met_confirm_pwd = view.findViewById(R.id.met_confirm_pwd);
+        //避免键盘出现的时候拉伸后面的activity
+        Window win = getWindow ();
+        win.setSoftInputMode (WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+        alertDialog.show();
+
+
+        //给确认按钮添加监听
+        bt_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mConfirmPwd = Objects.requireNonNull(met_confirm_pwd.getText()).toString();
+                String pwd = SpUtil.getString(getApplicationContext(), SpKey.SAFE_PWD, "");
+                if(!TextUtils.isEmpty(mConfirmPwd)) {
+                    if(pwd.equals(Md5Util.encoder(mConfirmPwd))) {
+                        //进入手机防盗
+                        Intent intent = new Intent(getApplicationContext(), SetupActivity.class);
+                        startActivity(intent);
+                        Toast.makeText(getApplicationContext(),"密码验证通过",Toast.LENGTH_SHORT).show();
+                        alertDialog.dismiss();
+                    }else
+                        Toast.makeText(getApplicationContext(),"密码错误",Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getApplicationContext(),"密码不能为空",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+        //给取消按钮添加监听
+        bt_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+    }
+
+    /**
+     * 展示初始化密码的对话框,并保存用户设置的密码
+     */
+    private void initPwdDialog() {
+        //创建对话框
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog alertDialog = builder.create();
+        View view = View.inflate(getApplicationContext(), R.layout.init_pwd_view, null);
+        alertDialog.setView(view);
+        //找控件
+        Button bt_submit = view.findViewById(R.id.bt_submit);
+        Button bt_cancel = view.findViewById(R.id.bt_cancel);
+        final MaterialEditText met_init_pwd = view.findViewById(R.id.met_init_pwd);
+        final MaterialEditText met_confirm_pwd = view.findViewById(R.id.met_confirm_pwd);
+        //避免键盘出现时拉伸后面的activity
+        Window window = getWindow();
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+        alertDialog.show();
+
+
+        //给确认密码的编辑框加监听 检测两次输入的密码是否一致
+        met_confirm_pwd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                //获取两个编辑框的内容
+                mInitPwd = Objects.requireNonNull(met_init_pwd.getText()).toString();
+                mConfirmPwd = Objects.requireNonNull(met_confirm_pwd.getText()).toString();
+
+                if(mInitPwd.equals(mConfirmPwd)){
+                    met_confirm_pwd.setHelperText("");
+                }else{
+                    met_confirm_pwd.setHelperText("两次密码不一致！");
+                }
+            }
+        });
+
+        //给确认按钮添加监听
+        bt_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!TextUtils.isEmpty(mInitPwd) && !TextUtils.isEmpty(mConfirmPwd)) {
+                    if(mInitPwd.equals(mConfirmPwd)) {
+                        //进入手机防盗
+                        Intent intent = new Intent(getApplicationContext(), SetupActivity.class);
+                        startActivity(intent);
+                        //保存密码
+                        SpUtil.putString(getApplicationContext(),SpKey.SAFE_PWD, Md5Util.encoder(mInitPwd));
+                        Toast.makeText(getApplicationContext(),"密码初始化成功",Toast.LENGTH_SHORT).show();
+                        alertDialog.dismiss();
+                    }else
+                        Toast.makeText(getApplicationContext(),"两次密码不一致",Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getApplicationContext(),"密码不能为空",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+        //给取消按钮添加监听
+        bt_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
             }
         });
     }
@@ -207,7 +375,6 @@ public class HomeActivity extends AppCompatActivity {
         intent.setDataAndType(Uri.fromFile(file), "application/vnd.package-archive");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivityForResult(intent, 100);
-        return;
     }
 
     /**
@@ -244,15 +411,14 @@ public class HomeActivity extends AppCompatActivity {
                     showUpdateDialog();
                 }
             }
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (PackageManager.NameNotFoundException | JSONException e) {
             e.printStackTrace();
-            return;
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return;
         }
     }
 
+    /**
+     * GridVIew总布局的数据适配器
+     */
     class MyAdapter extends BaseAdapter {
 
         @Override
@@ -272,7 +438,7 @@ public class HomeActivity extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View inflate = View.inflate(getApplicationContext(),R.layout.gridview_item,null);
+            @SuppressLint("ViewHolder") View inflate = View.inflate(getApplicationContext(),R.layout.gridview_item,null);
             SmartImageView siv_icon = inflate.findViewById(R.id.siv_icon);
             TextView tv_tool = inflate.findViewById(R.id.tv_tool);
 

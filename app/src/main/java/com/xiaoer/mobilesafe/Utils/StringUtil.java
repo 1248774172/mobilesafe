@@ -1,8 +1,6 @@
 package com.xiaoer.mobilesafe.Utils;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -24,7 +22,7 @@ public class StringUtil {
         }finally {
             try {
                 if(fileInputStream!=null) fileInputStream.close();
-                if(baos!=null) baos.close();
+                baos.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

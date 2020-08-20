@@ -1,44 +1,27 @@
 package com.xiaoer.mobilesafe.activity;
 
-import android.app.ActionBar;
-import android.app.Application;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.View;
 import android.view.animation.AlphaAnimation;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.LongDef;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.loopj.android.image.SmartImageView;
 import com.xiaoer.mobilesafe.R;
-import com.xiaoer.mobilesafe.Utils.StatusBarUtils;
+import com.xiaoer.mobilesafe.Utils.StatusBarUtil;
 import com.xiaoer.mobilesafe.Utils.StringUtil;
 
-import org.xutils.HttpManager;
-import org.xutils.common.Callback;
-import org.xutils.http.RequestParams;
-import org.xutils.x;
-
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -50,7 +33,7 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        StatusBarUtils.hideStatusBar(this);
+        StatusBarUtil.hideStatusBar(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
@@ -61,7 +44,7 @@ public class SplashActivity extends AppCompatActivity {
         //初始化动画
         initAnimation();
         //隐藏状态栏
-        StatusBarUtils.hideStatusBar(this);
+        StatusBarUtil.hideStatusBar(this);
 
     }
 /**
@@ -76,6 +59,7 @@ public class SplashActivity extends AppCompatActivity {
     /**
      *  @describe 初始化数据
      */
+    @SuppressLint("SetTextI18n")
     private void initDate() {
         Log.d(TAG, "initDate: ******************************");
         siv_icon.setImageUrl("http://10.0.2.2:8080/splash.png",R.drawable.splash);
@@ -121,14 +105,9 @@ public class SplashActivity extends AppCompatActivity {
                             s = StringUtil.stream2String(inputStream);
 //                            Log.d(TAG, "run: "+ s);
                             SystemClock.sleep(5000);
-                            enterAD();
-
                         } else {
                             Log.d(TAG, "getAD: wrong");
-                            enterAD();
                         }
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
                         enterAD();
                     } catch (IOException e) {
                         e.printStackTrace();

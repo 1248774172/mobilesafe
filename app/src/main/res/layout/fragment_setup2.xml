@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2/3"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="100sp"/>
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="第一步"
+        android:layout_marginLeft="10dp"
+        android:textSize="50sp"/>
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="绑定安全手机号:\n用于接收信息或发送指定短信控制本机"
+        android:textSize="20sp"
+        android:textColor="#000"/>
+
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/met_number"
+        app:met_maxCharacters="11"
+        android:singleLine="true"
+        android:textSize="20sp"
+        android:hint="输入电话号"
+        app:met_bottomTextSize="17sp"
+        app:met_helperTextAlwaysShown="false"
+        app:met_clearButton="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
+
+    <Button
+        android:id="@+id/bt_choose"
+        android:padding="15dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/circle_button_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="选择联系人"
+        android:textSize="30sp"
+        android:textColor="#000"/>
+
+    <TextView
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="第二步"
+        android:layout_marginLeft="10dp"
+        android:textSize="50sp"/>
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="绑定SIM卡:\n当您的手机更换sim卡时,会给您设置的安全手机发送报警信息"
+        android:textSize="20sp"
+        android:textColor="#000"/>
+    <com.xiaoer.mobilesafe.view.SettingItemView
+        android:id="@+id/siv_sim"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:bigTitle="绑定SIM卡"
+        app:smallTitleOff="SIM卡未绑定"
+        app:smallTitleOn="SIM卡已绑定" />
+
+
+
+</LinearLayout>
