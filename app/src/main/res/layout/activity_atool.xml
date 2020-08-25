@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.AToolActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/title"
+        android:text="高级工具"/>
+
+    <TextView
+        android:id="@+id/tv_address"
+        android:background="@drawable/selector_atool_item"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/list_star"
+        android:text="归属地查询"
+        android:textColor="#000"
+        android:textSize="20sp"/>
+    <View
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000"/>
+
+    <TextView
+        android:background="@drawable/selector_atool_item"
+        android:id="@+id/tv_sms"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/list_star"
+        android:text="短信备份"
+        android:textColor="#000"
+        android:textSize="20sp"/>
+
+    <View
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000"/>
+
+    <TextView
+        android:background="@drawable/selector_atool_item"
+        android:id="@+id/tv_number"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/list_star"
+        android:text="常用号码查询"
+        android:textColor="#000"
+        android:textSize="20sp"/>
+
+    <View
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000"/>
+
+    <TextView
+        android:background="@drawable/selector_atool_item"
+        android:id="@+id/tv_lock"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/list_star"
+        android:text="程序锁"
+        android:textColor="#000"
+        android:textSize="20sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/home_gaoji"/>
+    </RelativeLayout>
+
+</LinearLayout>

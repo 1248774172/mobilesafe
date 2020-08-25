@@ -2,19 +2,24 @@ package com.xiaoer.mobilesafe.Utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * 权限工具类
@@ -25,6 +30,8 @@ public class PermissionsUtil {
 
     private final int mRequestCode = 100;//权限请求码
     public static boolean showSystemSetting = true;
+    List<String> mPermissionList = null;
+    private String [] permissions = null;
 
     private PermissionsUtil() {
     }
@@ -41,14 +48,14 @@ public class PermissionsUtil {
 
     public void checkPermissions(Activity context, String[] permissions, @NonNull IPermissionsResult permissionsResult) {
         mPermissionsResult = permissionsResult;
-
+        this.permissions = permissions;
         if (Build.VERSION.SDK_INT < 23) {//6.0才用动态权限
             permissionsResult.passPermissons();
             return;
         }
 
         //创建一个mPermissionList，逐个判断哪些权限未授予，未授予的权限存储到mPerrrmissionList中
-        List<String> mPermissionList = new ArrayList<>();
+        mPermissionList = new ArrayList<>();
         //逐个判断你要的权限是否已经通过
         for (String permission : permissions) {
             if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
@@ -58,6 +65,7 @@ public class PermissionsUtil {
 
         //申请权限
         if (mPermissionList.size() > 0) {//有权限没有通过，需要申请
+            Log.d(TAG, "checkPermissions: -----------------------------申请权限数量："+mPermissionList.size());
             ActivityCompat.requestPermissions(context, permissions, mRequestCode);
         } else {
             //说明权限都已经通过，可以做你想做的事情去
@@ -75,17 +83,20 @@ public class PermissionsUtil {
     public void onRequestPermissionsResult(Activity context, int requestCode,
                                            @NonNull int[] grantResults) {
         boolean hasPermissionDismiss = false;//有权限没有通过
+        int forbit = 0;
         if (mRequestCode == requestCode) {
-            for (int grantResult : grantResults) {
-                if (grantResult == -1) {
+            for (int i=0;i < grantResults.length;i++) {
+                if (grantResults[i] == -1) {
                     hasPermissionDismiss = true;
+                    forbit = i;
                     break;
                 }
             }
             //如果有权限没有被允许
             if (hasPermissionDismiss) {
                 if (showSystemSetting) {
-                    showSystemPermissionsSettingDialog(context);//跳转到系统设置权限页面，或者直接关闭页面，不让他继续访问
+                    //跳转到系统设置权限页面，或者直接关闭页面，不让他继续访问
+                    showSystemPermissionsSettingDialog(context, permissions[forbit]);
                 } else {
                     mPermissionsResult.forbitPermissons();
                 }
@@ -103,11 +114,11 @@ public class PermissionsUtil {
      */
     AlertDialog mPermissionDialog;
 
-    private void showSystemPermissionsSettingDialog(final Activity context) {
+    private void showSystemPermissionsSettingDialog(final Activity context,String permission) {
         final String mPackName = context.getPackageName();
         if (mPermissionDialog == null) {
             mPermissionDialog = new AlertDialog.Builder(context)
-                    .setMessage("已禁用权限，请手动授予")
+                    .setMessage("已禁用权限，请手动授予"+permission)
                     .setPositiveButton("设置", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -139,7 +150,11 @@ public class PermissionsUtil {
             mPermissionDialog.cancel();
             mPermissionDialog = null;
         }
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static boolean canShowAlert(Context context){
+        return Settings.canDrawOverlays(context);
     }
 
 

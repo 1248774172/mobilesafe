@@ -1,11 +1,13 @@
 package com.xiaoer.mobilesafe.receiver;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
@@ -18,6 +20,7 @@ import android.view.KeyEvent;
 import android.view.View;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 
 import com.xiaoer.mobilesafe.R;
 import com.xiaoer.mobilesafe.Utils.SpKey;
@@ -54,6 +57,14 @@ public class SmsReceiver extends BroadcastReceiver {
 //                Log.d("SMSReceiver","Msg:"+strMsg);
 //            }
 //        }
+        if (ActivityCompat.checkSelfPermission(context,
+                Manifest.permission.READ_SMS)!= PackageManager.PERMISSION_GRANTED||
+                ActivityCompat.checkSelfPermission(context,Manifest.permission.RECEIVE_SMS)
+                        !=PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions((Activity) context,
+                    new String[]{Manifest.permission.READ_SMS,Manifest.permission.RECEIVE_SMS},
+                    1);
+        }
         //判断是否开启了手机防盗
         boolean safe_open = SpUtil.getBoolean(context, SpKey.SAFE_OPEN, false);
         if(safe_open) {
@@ -83,12 +94,14 @@ public class SmsReceiver extends BroadcastReceiver {
 
                 //如果短信包含#*location*# 那么发送位置
                 if (messageBody.contains("#*location*#")) {
+                    Log.d(TAG, "onReceive: --------------------收到短信发送位置。。。。");
                     Intent service = new Intent(context, LocationService.class);
                     context.startService(service);
                 }
 
                 //如果短信包含#*lockscreen*# 那么锁屏
                 if (messageBody.contains("#*lockscreen*#")) {
+                    Log.d(TAG, "onReceive: --------------------收到短信锁屏。。。。");
                     //初始化
                     initDpm(context);
                     //判断是否拥有设备管理员权限
@@ -110,6 +123,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
                 //如果短信包含#*wipedata*# 那么清除数据
                 if (messageBody.contains("#*wipedata*#")) {
+                    Log.d(TAG, "onReceive: --------------------收到短信清除数据。。。。");
                     //初始化
                     initDpm(context);
                     //判断是否拥有设备管理员权限

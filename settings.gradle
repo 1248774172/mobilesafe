@@ -1,3 +1,2 @@
-include ':CircleButton'
 include ':app'
 rootProject.name = "mobilesafe"

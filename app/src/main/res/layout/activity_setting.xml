@@ -22,9 +22,16 @@
         android:layout_height="wrap_content"/>
 
     <com.xiaoer.mobilesafe.view.SettingItemView
+        android:id="@+id/siv_address"
         mobilesafe:bigTitle="电话归属地显示设置"
         mobilesafe:smallTitleOff="电话归属地显示设置已关闭"
         mobilesafe:smallTitleOn="电话归属地显示设置已开启"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.xiaoer.mobilesafe.view.SettingClickView
+        android:id="@+id/scv_address"
+        mobilesafe:bigTitle="设置归属地显示风格"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

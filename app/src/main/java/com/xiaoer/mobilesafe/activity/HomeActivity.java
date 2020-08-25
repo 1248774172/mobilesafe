@@ -1,6 +1,5 @@
 package com.xiaoer.mobilesafe.activity;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -35,6 +34,7 @@ import com.loopj.android.image.SmartImageView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.xiaoer.mobilesafe.R;
 import com.xiaoer.mobilesafe.Utils.Md5Util;
+import com.xiaoer.mobilesafe.Utils.Permissions;
 import com.xiaoer.mobilesafe.Utils.PermissionsUtil;
 import com.xiaoer.mobilesafe.Utils.SpKey;
 import com.xiaoer.mobilesafe.Utils.SpUtil;
@@ -66,12 +66,16 @@ public class HomeActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        String [] permissions = new String[]{Manifest.permission.READ_CONTACTS,Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.RECEIVE_SMS,
-                Manifest.permission.SEND_SMS,Manifest.permission.READ_SMS,Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION};
         //检查权限
-        PermissionsUtil.getInstance().checkPermissions(this, permissions, new PermissionsUtil.IPermissionsResult() {
+        boolean canShowAlert = PermissionsUtil.canShowAlert(getApplicationContext());
+        Log.d(TAG, "onCreate: --------------------------------悬浮窗权限："+canShowAlert);
+        if(!canShowAlert){
+            Toast.makeText(getApplicationContext(),"请给予悬浮窗权限",Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+            intent.setData(Uri.parse("package:" + getPackageName()));
+            startActivityForResult(intent, 0);
+        }
+        PermissionsUtil.getInstance().checkPermissions(this, Permissions.permissions, new PermissionsUtil.IPermissionsResult() {
             @Override
             public void passPermissons() {
 
@@ -99,6 +103,7 @@ public class HomeActivity extends AppCompatActivity {
         gv_tool.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = null;
                 switch (position){
                     case 0:              //手机防盗
                         String pwd = SpUtil.getString(getApplicationContext(), SpKey.SAFE_PWD, "");
@@ -110,8 +115,12 @@ public class HomeActivity extends AppCompatActivity {
                             confirmPwdDialog();
                         }
                         break;
+                    case 7:     //高级工具
+                        intent = new Intent(getApplicationContext(), AToolActivity.class);
+                        startActivity(intent);
+                        break;
                     case 8:         //设置页面
-                        Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
+                        intent = new Intent(getApplicationContext(), SettingActivity.class);
                         startActivity(intent);
                         break;
                 }

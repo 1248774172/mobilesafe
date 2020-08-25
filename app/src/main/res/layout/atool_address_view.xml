@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/title"
+        android:text="归属地查询"/>
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/met_address_number"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        app:met_maxCharacters="12"
+        app:met_clearButton="true"
+        android:hint="请输入手机号码"/>
+
+    <Button
+        android:id="@+id/bt_address_find"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/circle_button_style"
+        android:text="查询"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:textColor="#000"
+        android:textSize="30sp"/>
+
+    <TextView
+        android:id="@+id/tv_address_result"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:textSize="20sp"/>
+
+</LinearLayout>

@@ -1,4 +1,0 @@
-at.markushi.circlebutton
-attr cb_color
-attr cb_pressedRingWidth
-styleable CircleButton cb_color cb_pressedRingWidth

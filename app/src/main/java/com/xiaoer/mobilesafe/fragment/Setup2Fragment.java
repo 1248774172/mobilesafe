@@ -83,7 +83,7 @@ public class Setup2Fragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String number = Objects.requireNonNull(met_number.getText()).toString();
+                String number = Objects.requireNonNull(met_number.getText()).toString().trim();
                 String regex = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17[013678])|(18[0,5-9]))\\d{8}$";
                 Pattern compile = Pattern.compile(regex);
                 Matcher matcher = compile.matcher(number);

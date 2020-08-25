@@ -117,7 +117,7 @@ public class SetupActivity extends AppCompatActivity {
 
         //获取设备管理器权限是否开启了
         DevicePolicyManager dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
-        ComponentName componentName = new ComponentName(this, MyDeviceAdminReceiver.class);
+        final ComponentName componentName = new ComponentName(this, MyDeviceAdminReceiver.class);
         boolean adminActive = dpm.isAdminActive(componentName);
         //对设置完成界面进行ui初始化
         //设置手机防盗是否开启条目的状态和监听事件
@@ -126,10 +126,14 @@ public class SetupActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                    Intent intent = new Intent(DevicePolicyManager.ACTION_DEVICE_ADMIN_SERVICE);
-                    intent.setComponent(new ComponentName("com.android.settings", "com.android.settings.DeviceAdminSettings"));
-                    startActivity(intent);
-                    finish();
+//                    Intent intent = new Intent(DevicePolicyManager.ACTION_DEVICE_ADMIN_SERVICE);
+//                    intent.setComponent(new ComponentName("com.android.settings", "com.android.settings.DeviceAdminSettings"));
+//                    startActivityForResult(intent,1);
+                Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
+                intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,"开启后实现手机防盗功能");
+                startActivityForResult(intent,1);
+                finish();
             }
         });
 
