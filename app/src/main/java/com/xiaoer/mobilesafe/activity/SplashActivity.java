@@ -18,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.loopj.android.image.SmartImageView;
 import com.xiaoer.mobilesafe.R;
-import com.xiaoer.mobilesafe.Utils.Permissions;
+import com.xiaoer.mobilesafe.entity.Permissions;
 import com.xiaoer.mobilesafe.Utils.PermissionsUtil;
 import com.xiaoer.mobilesafe.Utils.StatusBarUtil;
 import com.xiaoer.mobilesafe.Utils.StringUtil;

@@ -34,7 +34,7 @@ import com.loopj.android.image.SmartImageView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.xiaoer.mobilesafe.R;
 import com.xiaoer.mobilesafe.Utils.Md5Util;
-import com.xiaoer.mobilesafe.Utils.Permissions;
+import com.xiaoer.mobilesafe.entity.Permissions;
 import com.xiaoer.mobilesafe.Utils.PermissionsUtil;
 import com.xiaoer.mobilesafe.Utils.SpKey;
 import com.xiaoer.mobilesafe.Utils.SpUtil;
@@ -66,7 +66,7 @@ public class HomeActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        //检查权限
+        //检查悬浮窗权限
         boolean canShowAlert = PermissionsUtil.canShowAlert(getApplicationContext());
         Log.d(TAG, "onCreate: --------------------------------悬浮窗权限："+canShowAlert);
         if(!canShowAlert){
@@ -103,7 +103,7 @@ public class HomeActivity extends AppCompatActivity {
         gv_tool.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = null;
+                Intent intent;
                 switch (position){
                     case 0:              //手机防盗
                         String pwd = SpUtil.getString(getApplicationContext(), SpKey.SAFE_PWD, "");
@@ -115,6 +115,10 @@ public class HomeActivity extends AppCompatActivity {
                             confirmPwdDialog();
                         }
                         break;
+                    case 1:
+                        intent = new Intent(getApplicationContext(),BlackNumberActivity.class);
+                        startActivity(intent);
+                        break;
                     case 7:     //高级工具
                         intent = new Intent(getApplicationContext(), AToolActivity.class);
                         startActivity(intent);
@@ -124,7 +128,6 @@ public class HomeActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                 }
-
             }
         });
     }

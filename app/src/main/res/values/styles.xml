@@ -7,15 +7,15 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowNoTitle">true</item>
     </style>
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:padding="15dp"-->
-<!--        android:text="功能列表"-->
-<!--        android:textColor="#000"-->
-<!--        android:textSize="30sp"-->
-<!--        android:gravity="center"-->
-<!--        android:background="#FF99CC"/>-->
+    <!--    <TextView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:padding="15dp"-->
+    <!--        android:text="功能列表"-->
+    <!--        android:textColor="#000"-->
+    <!--        android:textSize="30sp"-->
+    <!--        android:gravity="center"-->
+    <!--        android:background="#FF99CC"/>-->
     <style name="title">
         <!-- Customize your theme here. -->
         <item name="android:padding">15dp</item>
@@ -26,5 +26,14 @@
         <item name="background">@android:color/holo_blue_bright</item>
         <item name="android:fitsSystemWindows">true</item>
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

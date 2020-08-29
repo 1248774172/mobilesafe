@@ -11,7 +11,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <uses-permission
         android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
         tools:ignore="ProtectedPermissions" />
@@ -37,6 +38,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
         <service
             android:name=".service.AddressService"
             android:enabled="true"
@@ -78,6 +81,14 @@
             </intent-filter>
         </receiver>
 
+
+        <activity
+            android:name=".activity.BlackNumberActivity"
+            android:label="@string/title_activity_black_number"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ToastLocationActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
         <activity android:name=".activity.AToolActivity" />
         <activity android:name=".activity.ChooseContactActivity" />
         <activity android:name=".activity.SetupActivity" />

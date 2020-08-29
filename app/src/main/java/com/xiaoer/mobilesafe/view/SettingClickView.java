@@ -8,11 +8,6 @@ import android.widget.TextView;
 
 import com.xiaoer.mobilesafe.R;
 
-import it.beppi.tristatetogglebutton_library.TriStateToggleButton;
-
-/**
- *
- */
 public class SettingClickView extends RelativeLayout {
 
     private TextView tv_bigTitle;
@@ -37,12 +32,25 @@ public class SettingClickView extends RelativeLayout {
     }
 
     /**
-     * @param title 标题
+     * 设置条目的大标题
+     * @param bigTitle 大标题
      */
-    private void initTitle(String title) {
-        tv_bigTitle.setText(title);
+    public void setBigTitle(String bigTitle){
+        tv_bigTitle.setText(bigTitle);
     }
 
+    /**
+     * 设置条目的小标题
+     * @param smallTitle 小标题
+     */
+    public void setSmallTitle(String smallTitle){
+        tv_smallTitle.setText(smallTitle);
+    }
+
+
+    /**
+     * 隐藏横线
+     */
     public void hideLine(){
         v_line.setVisibility(INVISIBLE);
     }

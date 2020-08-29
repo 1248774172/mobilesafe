@@ -41,6 +41,7 @@ public class AddressDao {
                     sLocation = data2.getString(0);
                 }
             }
+            sqLiteDatabase.close();
             return sLocation;
         }else{
             //说明用户输入的电话号不是11位或者不正确
@@ -85,6 +86,8 @@ public class AddressDao {
                     return sLocation;
             }
         }
+        if(sqLiteDatabase!=null)
+            sqLiteDatabase.close();
         return "未知号码";
     }
 }

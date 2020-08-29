@@ -32,4 +32,17 @@ public class SpKey {
      * 手机防盗安全手机号
      */
     public static final String SAFE_PHONE = "safe_phone";
+
+    /**
+     * 号码归属地背景颜色
+     */
+    public static final String ADDRESS_COLOR = "address_color";
+    /**
+     * 悬浮窗X坐标
+     */
+    public static final String TOAST_LOCATION_X = "toast_location_x";
+    /**
+     * 悬浮窗Y坐标
+     */
+    public static final String TOAST_LOCATION_Y = "toast_location_y";
 }

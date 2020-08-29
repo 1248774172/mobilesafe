@@ -14,6 +14,7 @@
         android:text="设置中心"/>
 
     <com.xiaoer.mobilesafe.view.SettingItemView
+        android:layout_marginTop="5dp"
         android:id="@+id/siv_update"
         mobilesafe:bigTitle="自动更新"
         mobilesafe:smallTitleOff="自动更新已关闭"
@@ -22,6 +23,7 @@
         android:layout_height="wrap_content"/>
 
     <com.xiaoer.mobilesafe.view.SettingItemView
+        android:layout_marginTop="5dp"
         android:id="@+id/siv_address"
         mobilesafe:bigTitle="电话归属地显示设置"
         mobilesafe:smallTitleOff="电话归属地显示设置已关闭"
@@ -30,8 +32,14 @@
         android:layout_height="wrap_content"/>
 
     <com.xiaoer.mobilesafe.view.SettingClickView
-        android:id="@+id/scv_address"
-        mobilesafe:bigTitle="设置归属地显示风格"
+        android:layout_marginTop="5dp"
+        android:id="@+id/scv_address_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.xiaoer.mobilesafe.view.SettingClickView
+        android:layout_marginTop="5dp"
+        android:id="@+id/scv_address_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
