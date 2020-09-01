@@ -43,4 +43,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <com.xiaoer.mobilesafe.view.SettingItemView
+        android:layout_marginTop="5dp"
+        android:id="@+id/siv_blacknumber"
+        mobilesafe:bigTitle="黑名单拦截设置"
+        mobilesafe:smallTitleOff="黑名单拦截已关闭"
+        mobilesafe:smallTitleOn="黑名单拦截已开启"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>

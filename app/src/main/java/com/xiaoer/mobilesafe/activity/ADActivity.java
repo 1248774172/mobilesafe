@@ -27,6 +27,7 @@ public class ADActivity extends AppCompatActivity {
     private String json;
     private Button bt_stepAD;
     private TimerTask mTimerTask;
+    private Timer mTimer;
 
 
     @Override
@@ -50,6 +51,7 @@ public class ADActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mTimerTask.cancel();
                 enterHome();
+                mTimerTask.cancel();
             }
         });
     }
@@ -81,8 +83,9 @@ public class ADActivity extends AppCompatActivity {
                         }
                     }
                 };
-                Timer timer = new Timer();
-                timer.schedule(mTimerTask, 0, 1000);
+                mTimer = new Timer();
+                mTimer.schedule(mTimerTask, 0, 1000);
+
             }
         }.start();
     }

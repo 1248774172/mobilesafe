@@ -42,4 +42,10 @@ public interface IBlackNumberDao {
      */
     boolean queryByPhone(String phone);
 
+    /**
+     * @param phone 电话号
+     * @return 查询某个电话号对应的拦截模式 1:短信 2：电话 3：所有
+     */
+    int queryModelByPhone(String phone);
+
 }

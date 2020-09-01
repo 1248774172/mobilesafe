@@ -355,7 +355,7 @@ public class BlackNumberActivity extends AppCompatActivity {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder vh;
-            if (convertView == null) {
+            if (null == convertView) {
                 convertView = View.inflate(getApplicationContext(),
                         R.layout.listview_blacknumber_item, null);
                 vh = new ViewHolder();
@@ -363,9 +363,8 @@ public class BlackNumberActivity extends AppCompatActivity {
                 vh.tv_model = convertView.findViewById(R.id.tv_blacknumber_model);
                 vh.iv_delete = convertView.findViewById(R.id.iv_delete);
                 convertView.setTag(vh);
-            } else {
+            } else
                 vh = (ViewHolder) convertView.getTag();
-            }
             vh.tv_phone.setText(mBlackNumberInfo.get(position).getPhone());
             int model = mBlackNumberInfo.get(position).getModel();
             switch (model) {

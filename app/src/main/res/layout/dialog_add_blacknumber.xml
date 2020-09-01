@@ -41,25 +41,28 @@
         <RadioButton
             android:checked="true"
             android:id="@+id/rb_model_sms"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="拦截短信"/>
+            android:text="拦截短信"
+            android:textColor="#000"/>
         <RadioButton
             android:id="@+id/rb_model_phone"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="拦截电话"/>
+            android:text="拦截电话"
+            android:textColor="#000"/>
         <RadioButton
             android:id="@+id/rb_model_all"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="拦截所有"/>
+            android:text="拦截所有"
+            android:textColor="#000"/>
     </RadioGroup>
     <LinearLayout
         android:layout_marginTop="5dp"

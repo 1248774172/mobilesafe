@@ -143,8 +143,24 @@ public class BlackNumberDaoImpl implements IBlackNumberDao {
         SQLiteDatabase db = mBlackNumberOpenHelper.getWritableDatabase();
         Cursor cursor = db.query("blacknumber", new String[]{"model"}, "phone = ?", new String[]{phone},
                 null, null, null);
+        //获取行数
         int count = cursor.getCount();
 
+        cursor.close();
+        db.close();
         return count != 0;
+    }
+
+    @Override
+    public int queryModelByPhone(String phone) {
+        SQLiteDatabase db = mBlackNumberOpenHelper.getWritableDatabase();
+        @SuppressLint("Recycle")
+        Cursor cursor = db.query("blacknumber", new String[]{"model"}, "phone = ?", new String[]{phone},
+                null, null, null);
+        int model = 0;
+        while (cursor.moveToNext()){
+            model = cursor.getInt(0);
+        }
+        return model;
     }
 }

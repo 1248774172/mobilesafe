@@ -67,17 +67,21 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         //检查悬浮窗权限
-        boolean canShowAlert = PermissionsUtil.canShowAlert(getApplicationContext());
-        Log.d(TAG, "onCreate: --------------------------------悬浮窗权限："+canShowAlert);
-        if(!canShowAlert){
-            Toast.makeText(getApplicationContext(),"请给予悬浮窗权限",Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-            intent.setData(Uri.parse("package:" + getPackageName()));
-            startActivityForResult(intent, 0);
+        if(Build.VERSION.SDK_INT >= 23) {
+            boolean canShowAlert = PermissionsUtil.canShowAlert(getApplicationContext());
+            Log.d(TAG, "onCreate: --------------------------------悬浮窗权限：" + canShowAlert);
+            if (!canShowAlert) {
+                Toast.makeText(getApplicationContext(), "请给予悬浮窗权限", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                intent.setData(Uri.parse("package:" + getPackageName()));
+                startActivityForResult(intent, 0);
+            }
         }
+        //检查其他权限
         PermissionsUtil.getInstance().checkPermissions(this, Permissions.permissions, new PermissionsUtil.IPermissionsResult() {
             @Override
             public void passPermissons() {
+                Log.d(TAG, "passPermissons: ----------------------权限都通过了！");
 
             }
 

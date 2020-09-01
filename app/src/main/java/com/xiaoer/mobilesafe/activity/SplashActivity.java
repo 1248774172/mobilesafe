@@ -41,6 +41,7 @@ public class SplashActivity extends AppCompatActivity {
     private String s;
     private RelativeLayout rl_root;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         StatusBarUtil.hideStatusBar(this);

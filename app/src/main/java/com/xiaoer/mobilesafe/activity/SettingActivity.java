@@ -20,6 +20,7 @@ import com.xiaoer.mobilesafe.Utils.ServiceUtil;
 import com.xiaoer.mobilesafe.Utils.SpKey;
 import com.xiaoer.mobilesafe.Utils.SpUtil;
 import com.xiaoer.mobilesafe.service.AddressService;
+import com.xiaoer.mobilesafe.service.BlackNumberService;
 import com.xiaoer.mobilesafe.view.SettingClickView;
 import com.xiaoer.mobilesafe.view.SettingItemView;
 
@@ -28,13 +29,14 @@ public class SettingActivity extends AppCompatActivity {
     private static final String TAG = "SettingActivity";
     private SettingItemView siv_update;
     private SettingClickView scv_address_style;
+    private SettingItemView siv_blacknumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-//        加载自动更新
+        //加载自动更新
         initUpdate();
         //加载手机号码归属地显示设置
         initAddress();
@@ -42,6 +44,37 @@ public class SettingActivity extends AppCompatActivity {
         initAddressStyle();
         //加载手机号码归属地悬浮窗位置
         initAddressLocation();
+        //加载黑名单拦截设置
+        initBlackNumber();
+
+    }
+
+    /**
+     * 加载黑名单拦截设置
+     */
+    private void initBlackNumber() {
+        siv_blacknumber = findViewById(R.id.siv_blacknumber);
+
+        boolean blackNumberService = ServiceUtil.isRunning(getApplicationContext(),
+                "com.xiaoer.mobilesafe.service.BlackNumberService");
+        siv_blacknumber.setChecked(blackNumberService);
+
+        siv_blacknumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                boolean checked = siv_blacknumber.isChecked();
+                siv_blacknumber.setChecked(!checked);
+
+                Intent intent = new Intent(getApplicationContext(), BlackNumberService.class);
+                if(siv_blacknumber.isChecked()) {
+                    Log.d(TAG, "onClick: ---------------------开启黑名单拦截");
+                    startService(intent);
+                }else {
+                    stopService(intent);
+                }
+            }
+        });
 
     }
 

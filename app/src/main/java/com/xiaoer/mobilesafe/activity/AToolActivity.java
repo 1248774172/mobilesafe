@@ -1,29 +1,44 @@
 package com.xiaoer.mobilesafe.activity;
 
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.ContextWrapper;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.xiaoer.mobilesafe.R;
 import com.xiaoer.mobilesafe.engine.AddressDao;
+import com.xiaoer.mobilesafe.engine.SmsBackup;
 
+import java.io.File;
 import java.util.Objects;
 
 public class AToolActivity extends AppCompatActivity {
 
+    private static final String TAG = "AToolActivity";
     private TextView tv_sms;
     private TextView tv_lock;
     private TextView tv_number;
@@ -31,6 +46,15 @@ public class AToolActivity extends AppCompatActivity {
     //用来判断当前view是具体功能还是功能列表  true代表是功能列表
     boolean b = true;
     private String mNumber;
+
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            Toast.makeText(getApplicationContext(),"短信备份完成",Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +65,16 @@ public class AToolActivity extends AppCompatActivity {
         //初始化ui
         initUI();
 
-        //给归属地添加监听事件
+        //给归属地添加点击事件
         addAddressListener();
-        //给短信备份添加监听事件
+
+        //给短信备份添加点击事件
         addSmsListener();
-        //给常用号码添加监听事件
+
+        //给常用号码添加点击事件
         addPhoneListener();
-        //给程序锁添加监听事件
+
+        //给程序锁添加点击事件
         addLockListener();
 
     }
@@ -59,9 +86,86 @@ public class AToolActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 给短信备份添加点击事件
+     */
     private void addSmsListener() {
+        tv_sms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showBackupConfirmDialog();
+            }
+        });
 
     }
+
+    /**
+     * 展示确认备份短信的对话框
+     */
+    private void showBackupConfirmDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("备份短信");
+        builder.setMessage("是否立即备份短信？");
+        builder.setPositiveButton("立即备份", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //展示备份进度
+                showBackupSmsDialog();
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("稍后再说", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
+    }
+
+    /**
+     * 展示备份进度
+     */
+    private void showBackupSmsDialog() {
+//        final String path = Environment.getExternalStorageDirectory().getPath()+
+//                File.separator+"mobilesafe"+File.separator+"backup"+File.separator+"SmsBackup"+
+//                    File.separator+"sms.xml";
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setIcon(R.mipmap.ic_launcher);
+        progressDialog.setTitle("短信备份");
+        //指定进度条的样式 水平样式
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.show();
+
+        new Thread(){
+            @Override
+            public void run() {
+                ContextWrapper cw = new ContextWrapper(getApplicationContext());
+//                File directory = cw.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+                File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+                File file = new File(directory, "sms.xml");
+                Log.d(TAG, "showBackupSmsDialog: ----------------------------------备份路径:"+file.getPath());
+
+                SmsBackup.backupSms(getApplicationContext(), file, new SmsBackup.ProgressChange() {
+                    @Override
+                    public void setMax(int max) {
+                        progressDialog.setMax(max);
+                    }
+
+                    @Override
+                    public void setIndex(int index) {
+                        progressDialog.setProgress(index);
+                    }
+                });
+                progressDialog.dismiss();
+                mHandler.sendEmptyMessage(0);
+            }
+        }.start();
+    }
+
 
     /**
      * 给指定的textview添加点击事件并且返回指定布局文件的view对象
@@ -108,6 +212,7 @@ public class AToolActivity extends AppCompatActivity {
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                     }
 
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                     @Override
                     public void afterTextChanged(Editable s) {
                         mNumber = Objects.requireNonNull(met_address_number.getText()).toString();
