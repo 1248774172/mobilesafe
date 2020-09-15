@@ -119,8 +119,12 @@ public class HomeActivity extends AppCompatActivity {
                             confirmPwdDialog();
                         }
                         break;
-                    case 1:
+                    case 1:     //通信卫士
                         intent = new Intent(getApplicationContext(),BlackNumberActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 2:     //软件管理
+                        intent = new Intent(getApplicationContext(),AppManagerActivity.class);
                         startActivity(intent);
                         break;
                     case 7:     //高级工具

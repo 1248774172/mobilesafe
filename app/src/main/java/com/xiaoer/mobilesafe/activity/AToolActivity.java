@@ -1,16 +1,22 @@
 package com.xiaoer.mobilesafe.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
+import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -27,9 +33,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.xiaoer.mobilesafe.R;
+import com.xiaoer.mobilesafe.Utils.DocumentUtils;
 import com.xiaoer.mobilesafe.engine.AddressDao;
 import com.xiaoer.mobilesafe.engine.SmsBackup;
 
@@ -52,7 +61,13 @@ public class AToolActivity extends AppCompatActivity {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            Toast.makeText(getApplicationContext(),"短信备份完成",Toast.LENGTH_SHORT).show();
+            Bundle data = msg.getData();
+            int count = data.getInt("count");
+            if(count != 0) {
+                Toast.makeText(getApplicationContext(), "成功备份" + count + "条短信", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(getApplicationContext(), "服务器繁忙，备份失败", Toast.LENGTH_SHORT).show();
+            }
         }
     };
 
@@ -78,6 +93,7 @@ public class AToolActivity extends AppCompatActivity {
         addLockListener();
 
     }
+
 
     private void addLockListener() {
     }
@@ -140,16 +156,15 @@ public class AToolActivity extends AppCompatActivity {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.show();
 
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
                 ContextWrapper cw = new ContextWrapper(getApplicationContext());
-//                File directory = cw.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
-                File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-                File file = new File(directory, "sms.xml");
-                Log.d(TAG, "showBackupSmsDialog: ----------------------------------备份路径:"+file.getPath());
+                File directory = cw.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
 
-                SmsBackup.backupSms(getApplicationContext(), file, new SmsBackup.ProgressChange() {
+                File file = new File(directory, "sms.xml");
+
+                int i = SmsBackup.backupSms(getApplicationContext(), file, new SmsBackup.ProgressChange() {
                     @Override
                     public void setMax(int max) {
                         progressDialog.setMax(max);
@@ -161,7 +176,11 @@ public class AToolActivity extends AppCompatActivity {
                     }
                 });
                 progressDialog.dismiss();
-                mHandler.sendEmptyMessage(0);
+                Message message = new Message();
+                Bundle bundle = new Bundle();
+                bundle.putInt("count", i);
+                message.setData(bundle);
+                mHandler.sendMessage(message);
             }
         }.start();
     }
