@@ -18,10 +18,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.loopj.android.image.SmartImageView;
 import com.xiaoer.mobilesafe.R;
-import com.xiaoer.mobilesafe.entity.Permissions;
 import com.xiaoer.mobilesafe.Utils.PermissionsUtil;
 import com.xiaoer.mobilesafe.Utils.StatusBarUtil;
 import com.xiaoer.mobilesafe.Utils.StringUtil;
+import com.xiaoer.mobilesafe.entity.Permissions;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,7 +41,7 @@ public class SplashActivity extends AppCompatActivity {
     private String s;
     private RelativeLayout rl_root;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         StatusBarUtil.hideStatusBar(this);
@@ -85,6 +85,7 @@ public class SplashActivity extends AppCompatActivity {
             tv_versionName.setText("当前版本："+versionName);
             //加载数据库
             initDB("address.db");
+            initDB("commonnum.db");
 
             //加载广告
             getAD();
@@ -190,7 +191,7 @@ public class SplashActivity extends AppCompatActivity {
     /**
      * 检查权限
      */
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void checkPermissions() {
         //检查权限
         PermissionsUtil.getInstance().checkPermissions(this, Permissions.permissions, new PermissionsUtil.IPermissionsResult() {

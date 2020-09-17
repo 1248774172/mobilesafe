@@ -1,13 +1,12 @@
 package com.xiaoer.mobilesafe.activity;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,17 +14,19 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
-import android.os.storage.StorageManager;
-import android.os.storage.StorageVolume;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
+import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,21 +34,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.xiaoer.mobilesafe.R;
-import com.xiaoer.mobilesafe.Utils.DocumentUtils;
 import com.xiaoer.mobilesafe.engine.AddressDao;
+import com.xiaoer.mobilesafe.engine.CommonNumDao;
 import com.xiaoer.mobilesafe.engine.SmsBackup;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 public class AToolActivity extends AppCompatActivity {
 
-    private static final String TAG = "AToolActivity";
     private TextView tv_sms;
     private TextView tv_lock;
     private TextView tv_number;
@@ -61,15 +60,33 @@ public class AToolActivity extends AppCompatActivity {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            Bundle data = msg.getData();
-            int count = data.getInt("count");
-            if(count != 0) {
-                Toast.makeText(getApplicationContext(), "成功备份" + count + "条短信", Toast.LENGTH_SHORT).show();
-            }else {
-                Toast.makeText(getApplicationContext(), "服务器繁忙，备份失败", Toast.LENGTH_SHORT).show();
+            if(msg.what == 0) {
+                Bundle data = msg.getData();
+                int count = data.getInt("count");
+                if (count != 0) {
+                    Toast.makeText(getApplicationContext(), "成功备份" + count + "条短信", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "服务器繁忙，备份失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+            if(msg.what == 1){
+                MyAdapter myAdapter = new MyAdapter();
+                elv_commonNum.setAdapter(myAdapter);
+                elv_commonNum.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+                    @Override
+                    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_DIAL);
+                        intent.setData(Uri.parse("tel:"+mGroupList.get(groupPosition).childList.get(childPosition).number));
+                        startActivity(intent);
+                        return false;
+                    }
+                });
             }
         }
     };
+    private List<CommonNumDao.Group> mGroupList;
+    private ExpandableListView elv_commonNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +116,16 @@ public class AToolActivity extends AppCompatActivity {
     }
 
     private void addPhoneListener() {
+        View view = getView(tv_number, R.layout.atool_commonnum_view);
+        elv_commonNum = view.findViewById(R.id.elv_commonNum);
+        new Thread(){
+            @Override
+            public void run() {
+                CommonNumDao commonNumDao = new CommonNumDao();
+                mGroupList = commonNumDao.getGroup(getApplicationContext());
+                mHandler.sendEmptyMessage(1);
+            }
+        }.start();
 
     }
 
@@ -293,5 +320,90 @@ public class AToolActivity extends AppCompatActivity {
             //给程序锁添加监听事件
             addLockListener();
         }
+    }
+
+    class MyAdapter extends BaseExpandableListAdapter{
+
+        @Override
+        public int getGroupCount() {
+            return mGroupList.size();
+        }
+
+        @Override
+        public int getChildrenCount(int groupPosition) {
+            return mGroupList.get(groupPosition).childList.size();
+        }
+
+        @Override
+        public CommonNumDao.Group getGroup(int groupPosition) {
+            return mGroupList.get(groupPosition);
+        }
+
+        @Override
+        public CommonNumDao.Child getChild(int groupPosition, int childPosition) {
+            return mGroupList.get(groupPosition).childList.get(childPosition);
+        }
+
+        @Override
+        public long getGroupId(int groupPosition) {
+            return groupPosition;
+        }
+
+        @Override
+        public long getChildId(int groupPosition, int childPosition) {
+            return childPosition;
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return false;
+        }
+
+        @SuppressLint("SetTextI18n")
+        @Override
+        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+            TextView textView = new TextView(getApplicationContext());
+            textView.setText("                 "+getGroup(groupPosition).name);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,25);
+            textView.setTextColor(Color.parseColor("#000000"));
+            textView.setPadding(10,10,10,10);
+            return textView;
+        }
+
+        @Override
+        public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+            ViewHolder viewHolder;
+            if(convertView == null){
+                convertView = View.inflate(getApplicationContext(), R.layout.commonnum_list_item, null);
+                viewHolder = new ViewHolder(convertView);
+                convertView.setTag(viewHolder);
+            }else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+
+            viewHolder.tv_commonNum_name.setText(getChild(groupPosition,childPosition).name);
+            viewHolder.tv_commonNum_num.setText(getChild(groupPosition,childPosition).number);
+            return convertView;
+        }
+
+        @Override
+        public boolean isChildSelectable(int groupPosition, int childPosition) {
+            return true;
+        }
+    }
+
+    static class ViewHolder{
+        View view;
+        TextView tv_commonNum_name;
+        TextView tv_commonNum_num;
+        public ViewHolder(View view){
+            this.view = view;
+            tv_commonNum_name = view.findViewById(R.id.tv_commonNum_name);
+            tv_commonNum_num = view.findViewById(R.id.tv_commonNum_num);
+        }
+
+
+
     }
 }
