@@ -45,4 +45,9 @@ public class SpKey {
      * 悬浮窗Y坐标
      */
     public static final String TOAST_LOCATION_Y = "toast_location_y";
+
+    /**
+     * 是否显示系统进程
+     */
+    public static final String SYS_PROCESS = "sys_process";
 }

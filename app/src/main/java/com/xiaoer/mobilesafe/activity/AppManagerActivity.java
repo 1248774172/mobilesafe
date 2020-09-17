@@ -11,7 +11,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StatFs;
-import android.os.SystemClock;
 import android.provider.Settings;
 import android.text.format.Formatter;
 import android.util.Log;
@@ -46,8 +45,6 @@ public class AppManagerActivity extends AppCompatActivity implements View.OnClic
     private ListView lv_app;
     //避免用户在加载数据过程中就关闭了activity造成错误
     private boolean isShow = true;
-    //如果用户打开了某个应用的详情界面并卸载了应用那么指为true 否则都为false
-    private boolean isUpdate = false;
     private List<AppInfo> mAppInfos;
     //系统应用和用户应用在一个集合中 这个是两种应用的分界线 前面是用户应用 后面是系统应用
     private int mSeparator;
@@ -87,12 +84,29 @@ public class AppManagerActivity extends AppCompatActivity implements View.OnClic
         isShow = true;
         Log.d(TAG, "onResume: ----------------------------重新获取焦点");
         initView();
-        if(isUpdate) {
-            pb.setVisibility(View.VISIBLE);
-            SystemClock.sleep(500);
-            if (mMyAdapter != null)
-                mMyAdapter.notifyDataSetChanged();
-            pb.setVisibility(View.INVISIBLE);
+        if(mAppInfos != null) {
+            if(mAppInfo != null) {
+                PackageManager packageManager = getPackageManager();
+                PackageInfo pi;
+                try {
+                    pi = packageManager.getPackageInfo(mAppInfo.getPackageName(), 0);
+                } catch (PackageManager.NameNotFoundException e) {
+                    pi = null;
+                    e.printStackTrace();
+                }
+                if (pi == null) {
+                    Log.d(TAG, "onResume: -----------------------移除了" + mAppInfo.getPackageName());
+                    mAppInfos.remove(mAppInfo);
+                    for (int i = 0; i < mAppInfos.size(); i++) {
+                        if (mAppInfos.get(i).getModel() == 2) {
+                            mSeparator = i;
+                            break;
+                        }
+                    }
+                    if (mMyAdapter != null)
+                        mMyAdapter.notifyDataSetChanged();
+                }
+            }
         }
         super.onResume();
     }
@@ -183,19 +197,7 @@ public class AppManagerActivity extends AppCompatActivity implements View.OnClic
                 Uri uri = Uri.fromParts("package", mAppInfo.getPackageName(), null);
                 intent.setData(uri);
                 startActivity(intent);
-                PackageManager packageManager = getPackageManager();
-                PackageInfo pi;
-                try {
-                    pi = packageManager.getPackageInfo(mAppInfo.getPackageName(),0);
-                } catch (PackageManager.NameNotFoundException e) {
-                    pi = null;
-                    e.printStackTrace();
-                }
-                if(pi == null) {
-                    Log.d(TAG, "onClick: -----------------------移除了"+mAppInfo.getPackageName());
-                    mAppInfos.remove(mAppInfo);
-                    isUpdate = true;
-                }
+
             }
         });
 
@@ -274,19 +276,6 @@ public class AppManagerActivity extends AppCompatActivity implements View.OnClic
                 Uri uri = Uri.fromParts("package", mAppInfo.getPackageName(), null);
                 intent.setData(uri);
                 startActivity(intent);
-                PackageManager packageManager = getPackageManager();
-                PackageInfo pi;
-                try {
-                    pi = packageManager.getPackageInfo(mAppInfo.getPackageName(),0);
-                } catch (PackageManager.NameNotFoundException e) {
-                    pi = null;
-                    e.printStackTrace();
-                }
-                if(pi == null) {
-                    Log.d(TAG, "onClick: -----------------------移除了"+mAppInfo.getPackageName());
-                    mAppInfos.remove(mAppInfo);
-                    isUpdate = true;
-                }
                 break;
             case R.id.tv_start_app:
                 //开启应用

@@ -127,6 +127,10 @@ public class HomeActivity extends AppCompatActivity {
                         intent = new Intent(getApplicationContext(),AppManagerActivity.class);
                         startActivity(intent);
                         break;
+                    case 3:     //进程管理
+                        intent = new Intent(getApplicationContext(),ProcessManagerActivity.class);
+                        startActivity(intent);
+                        break;
                     case 7:     //高级工具
                         intent = new Intent(getApplicationContext(), AToolActivity.class);
                         startActivity(intent);

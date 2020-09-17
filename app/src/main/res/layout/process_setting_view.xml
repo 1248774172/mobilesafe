@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/title"
+        android:text="设置"/>
+
+    <com.xiaoer.mobilesafe.view.SettingItemView
+        android:id="@+id/siv_process_view"
+        android:layout_width="match_parent"
+        app:bigTitle="系统进程"
+        app:smallTitleOff="不显示系统进程"
+        app:smallTitleOn="显示系统进程"
+        android:layout_height="wrap_content"/>
+
+    <com.xiaoer.mobilesafe.view.SettingItemView
+        android:id="@+id/siv_process_clean"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:bigTitle="锁屏清理"
+        app:smallTitleOff="锁屏清理已关闭"
+        app:smallTitleOn="锁屏清理已开启"/>
+
+</LinearLayout>

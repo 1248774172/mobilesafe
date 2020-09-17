@@ -21,7 +21,7 @@
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="marquee_forever"
         android:focusableInTouchMode="true"
-        android:text="床前明月光，疑是地上霜，举头望明月，低头思故乡。" />
+        android:text="技术路漫漫，吾将上下而求索！技术路漫漫，吾将上下而求索！技术路漫漫，吾将上下而求索！" />
 
     <GridView
         android:id="@+id/gv_tool"
