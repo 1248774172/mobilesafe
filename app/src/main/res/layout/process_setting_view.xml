@@ -14,9 +14,9 @@
     <com.xiaoer.mobilesafe.view.SettingItemView
         android:id="@+id/siv_process_view"
         android:layout_width="match_parent"
-        app:bigTitle="系统进程"
-        app:smallTitleOff="不显示系统进程"
-        app:smallTitleOn="显示系统进程"
+        app:bigTitle="系统进程显示设置"
+        app:smallTitleOff="显示系统进程"
+        app:smallTitleOn="屏蔽系统进程"
         android:layout_height="wrap_content"/>
 
     <com.xiaoer.mobilesafe.view.SettingItemView

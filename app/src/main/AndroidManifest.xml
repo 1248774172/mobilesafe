@@ -50,10 +50,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <receiver android:name=".receiver.KillProcessReceiver">
+            <intent-filter>
+                <action android:name="com.xiaoer.mobilesafe.KILL_BACKGROUND_PROCESS"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".service.UpdateWidgetService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver android:name=".receiver.MyAppWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/process_widget_provider" />
+        </receiver>
+
         <service
             android:name=".service.LockScreenClean"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <activity android:name=".activity.ProcessManagerActivity" />
         <activity android:name=".activity.AppManagerActivity" />
@@ -114,9 +137,18 @@
         <activity android:name=".activity.ChooseContactActivity" />
         <activity android:name=".activity.SetupActivity" />
         <activity android:name=".activity.SettingActivity" />
+
         <activity
             android:name=".activity.HomeActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            >
+            <intent-filter>
+                <action android:name="com.xiaoer.mobilesafe.Home"/>
+<!--                隐式意图开启时系统会默认加上category（default） 所以必须添加这个节点否则匹配不上-->
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <activity android:name=".activity.ADActivity" />
         <activity android:name=".activity.SplashActivity">
             <intent-filter>

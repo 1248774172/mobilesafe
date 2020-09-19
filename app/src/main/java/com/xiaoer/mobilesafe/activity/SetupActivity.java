@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -45,7 +44,7 @@ public class SetupActivity extends AppCompatActivity {
     private View mSetup_view;
     private View mSetup_over;
     private SettingItemView siv_safe;
-    private SettingItemView siv_admin;
+    private ComponentName mComponentName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +97,7 @@ public class SetupActivity extends AppCompatActivity {
 
         vp_setup = mSetup_view.findViewById(R.id.vp_setup);
         siv_safe = mSetup_over.findViewById(R.id.siv_safe);
-        siv_admin = mSetup_over.findViewById(R.id.siv_admin);
+        SettingItemView siv_admin = mSetup_over.findViewById(R.id.siv_admin);
         TextView tv_phone = mSetup_over.findViewById(R.id.tv_phone);
         TextView tv_reset = mSetup_over.findViewById(R.id.tv_reset);
 
@@ -117,8 +116,8 @@ public class SetupActivity extends AppCompatActivity {
 
         //获取设备管理器权限是否开启了
         DevicePolicyManager dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
-        final ComponentName componentName = new ComponentName(this, MyDeviceAdminReceiver.class);
-        boolean adminActive = dpm.isAdminActive(componentName);
+        mComponentName = new ComponentName(this, MyDeviceAdminReceiver.class);
+        boolean adminActive = dpm.isAdminActive(mComponentName);
         //对设置完成界面进行ui初始化
         //设置手机防盗是否开启条目的状态和监听事件
         siv_admin.setChecked(adminActive);
@@ -130,7 +129,7 @@ public class SetupActivity extends AppCompatActivity {
 //                    intent.setComponent(new ComponentName("com.android.settings", "com.android.settings.DeviceAdminSettings"));
 //                    startActivityForResult(intent,1);
                 Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-                intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
+                intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, mComponentName);
                 intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,"开启后实现手机防盗功能");
                 startActivityForResult(intent,1);
                 finish();
